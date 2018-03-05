@@ -5,24 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context="com.codekatana.passwordgen.MainActivity">
+    tools:context="com.codekatana.passwordgen.MainActivity"
+    tools:orientation="vertical">
 
     <EditText
-        android:id="@+id/txtPassword"
+        android:id="@+id/txtGenerated"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:editable="false"
         android:ems="10"
         android:hint="@string/txt.password"
-        android:inputType="text"
+        android:inputType="text|textNoSuggestions"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        app:layout_constraintEnd_toStartOf="@+id/btnCopy"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblGeneratePassword" />
@@ -30,16 +30,20 @@
     <Button
         android:id="@+id/btnGenerate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/txtPassword"
-        android:layout_below="@+id/txtPassword"
-        android:layout_marginTop="24dp"
+        android:layout_height="50dp"
+        android:layout_alignEnd="@+id/txtGenerated"
+        android:layout_below="@+id/txtGenerated"
+        android:layout_marginTop="40dp"
+        android:capitalize="words"
         android:onClick="onClickGenerate"
         android:text="@string/btn.generate"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textAllCaps="@bool/allCaps"
+        app:layout_constraintEnd_toStartOf="@+id/btnCopy"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblNumChars" />
+        app:layout_constraintTop_toBottomOf="@+id/seekNumWords"
+        tools:text="@string/btn.generate" />
 
     <TextView
         android:id="@+id/lblGeneratePassword"
@@ -48,95 +52,102 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:labelFor="@id/txtPassword"
+        android:layout_marginTop="50dp"
+        android:labelFor="@id/txtGenerated"
         android:text="@string/txt.password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnCopy"
-        android:layout_width="61dp"
-        android:layout_height="47dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:text="@string/btn.copy"
-        app:layout_constraintBaseline_toBaselineOf="@+id/txtPassword"
+        android:textAllCaps="@bool/allCaps"
+        android:textIsSelectable="@bool/allCaps"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtPassword" />
+        app:layout_constraintStart_toEndOf="@+id/btnGenerate" />
 
     <TextView
         android:id="@+id/lblNumWords"
-        android:layout_width="125dp"
-        android:layout_height="23dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
         android:text="@string/txt.numwords"
-        app:layout_constraintEnd_toStartOf="@+id/lblTxtNumWords"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekNumWords" />
+        app:layout_constraintStart_toStartOf="@+id/seekNumWords"
+        app:layout_constraintTop_toBottomOf="@+id/chkSymbols" />
 
     <TextView
         android:id="@+id/lblTxtNumWords"
-        android:layout_width="29dp"
+        android:layout_width="wrap_content"
         android:layout_height="22dp"
+        android:layout_marginStart="16dp"
         android:text="3"
         app:layout_constraintBaseline_toBaselineOf="@+id/lblNumWords"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lblNumWords" />
 
     <SeekBar
         android:id="@+id/seekNumWords"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_width="308dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
         android:max="@integer/numMaxWords"
         android:min="1"
         android:progress="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
-
-    <TextView
-        android:id="@+id/lblNumChars"
-        android:layout_width="102dp"
-        android:layout_height="19dp"
-        android:layout_marginTop="16dp"
-        android:text="14 Characters"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblNumWords" />
 
-    <CheckBox
-        android:id="@+id/chkUpperCase"
+    <TextView
+        android:id="@+id/lblNumChars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="32dp"
+        android:text="   "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <CheckBox
+        android:id="@+id/chkUpperCase"
+        android:layout_width="99dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="@string/txt.uppercase"
-        app:layout_constraintStart_toStartOf="@+id/btnGenerate"
-        app:layout_constraintTop_toBottomOf="@+id/btnGenerate" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/chkNumbers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/chkNumbers" />
 
     <CheckBox
         android:id="@+id/chkNumbers"
-        android:layout_width="wrap_content"
+        android:layout_width="89dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:text="@string/txt.numbers"
-        app:layout_constraintStart_toStartOf="@+id/btnGenerate"
-        app:layout_constraintTop_toBottomOf="@+id/chkUpperCase" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/chkSymbols"
+        app:layout_constraintEnd_toStartOf="@+id/chkUpperCase"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/chkSymbols" />
 
     <CheckBox
         android:id="@+id/chkSymbols"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_width="86dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="40dp"
         android:text="@string/txt.symbols"
-        app:layout_constraintStart_toStartOf="@+id/btnGenerate"
-        app:layout_constraintTop_toBottomOf="@+id/chkNumbers" />
+        app:layout_constraintEnd_toStartOf="@+id/chkNumbers"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtGenerated" />
 
 </android.support.constraint.ConstraintLayout>

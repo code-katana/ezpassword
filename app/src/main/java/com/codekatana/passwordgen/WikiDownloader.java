@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import okhttp3.OkHttpClient;
@@ -14,20 +16,21 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by sixface on 3/3/18.
+ * The background task that will call the Wikipedia API to get a random article and get random text
+ * Created by arumugam on 3/3/18.
  */
 
-public class WikiDownloader extends AsyncTask<Integer, Integer, String> {
+public class WikiDownloader extends AsyncTask<Integer, Integer, List<String>> {
 
     private static final String WIKI_URL = "https://en.wikipedia.org/w/api.php";
     private static final String APPLICATION_JSON = "application/json";
     private static final String EZ_PASS = "EzPass";
 
     @Override
-    protected String doInBackground(Integer... integers) {
+    protected List<String> doInBackground(Integer... integers) {
         OkHttpClient client = new OkHttpClient();
         int count = integers[0];
-        String article = "", out = "";
+        String article = "";
 
         Random rand = new Random();
         Request request = new Request.Builder()
@@ -62,42 +65,25 @@ public class WikiDownloader extends AsyncTask<Integer, Integer, String> {
                         .getString("extract");
 
             }
-
-
             String cleanText = article.replaceAll("[^a-zA-Z\\s]", "");
-
             String[] words = cleanText.split("\\s+");
-            StringBuilder sb = new StringBuilder();
-//            Log.d(EZ_PASS, Arrays.asList(words).toString());
             int numWords = words.length;
+            List<String> result = new ArrayList<>(count);
             for (int i = 0; i < count; i++) {
                 String n = words[rand.nextInt(numWords)];
-                String str = processWord(n);
-                if (str.length() > 1) {
-                    sb.append(str);
+                if (n.length() > 1) {
+                    result.add(n.toLowerCase());
                 } else {
                     i--;
                 }
             }
-            out = sb.toString();
-            out = out.replaceFirst("a", "@");
-            out = out.replaceFirst("o", "0");
-            out = out.replaceFirst("s", "$");
+            return result;
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return out;
-    }
-
-    private String processWord(String input) {
-        input = input.trim();
-        String firstLetter = input.substring(0, 1);
-        if (input.length() > 1) {
-            return firstLetter.toUpperCase() + input.substring(1);
-        } else
-            return firstLetter.toUpperCase();
+        return null;
     }
 }
