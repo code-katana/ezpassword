@@ -7,4 +7,7 @@
     <string name="txt.uppercase">Uppercase</string>
     <string name="txt.numbers">Numbers</string>
     <string name="txt.symbols">Symbols</string>
+    <string name="txt.generated">Generated Value</string>
+    <string name="txt.copied">Password Copied!</string>
+    <string name="txt.NumChars">Number of characters generated: </string>
 </resources>

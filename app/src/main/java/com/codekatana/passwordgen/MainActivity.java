@@ -1,5 +1,8 @@
 package com.codekatana.passwordgen;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Random;
@@ -77,18 +81,35 @@ public class MainActivity extends AppCompatActivity {
                 int powerBallNumber = rand.nextInt(MAX_RAND);
                 if (powerBallNumber % 2 == 0)
                     generated = generated.replaceFirst("[sS]", "\\$");
-                if (powerBallNumber % 3 == 0)
+                else
                     generated = generated.replaceFirst("[iI]", "!");
-                if (powerBallNumber % 4 == 0)
+                if (powerBallNumber % 3 == 0)
                     generated = generated.replaceFirst("[aA]", "@");
             }
 
             textBox.setText(generated);
+            TextView numChars = findViewById(R.id.lblNumChars);
+            numChars.setText(getResources().getText(R.string.txt_NumChars) + String.format("%d", generated.length()));
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onClickCopy(View view) {
+        EditText textBox = findViewById(R.id.txtGenerated);
+        String generated = textBox.getText().toString();
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Generated Password", generated);
+        clipboard.setPrimaryClip(clip);
+
+        Context context = getApplicationContext();
+        CharSequence text = getResources().getText(R.string.txt_copied);
+        int duration = Toast.LENGTH_LONG;
+
+        Toast.makeText(context, text, duration).show();
     }
 
 }

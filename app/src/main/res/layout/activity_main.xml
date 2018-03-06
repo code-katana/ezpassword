@@ -14,14 +14,17 @@
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:editable="@bool/bool.editable"
         android:ems="10"
-        android:hint="@string/txt.password"
-        android:inputType="text|textNoSuggestions"
+        android:fontFamily="@font/roboto_mono"
+        android:hint="@string/txt.generated"
+        android:inputType="none"
         android:selectAllOnFocus="true"
         android:singleLine="true"
+        android:textIsSelectable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
+        android:onClick="onClickCopy"
         android:text="@string/btn.copy"
         android:textAllCaps="@bool/allCaps"
         android:textIsSelectable="@bool/allCaps"
@@ -88,7 +92,8 @@
         android:layout_marginStart="16dp"
         android:text="3"
         app:layout_constraintBaseline_toBaselineOf="@+id/lblNumWords"
-        app:layout_constraintStart_toEndOf="@+id/lblNumWords" />
+        app:layout_constraintStart_toEndOf="@+id/lblNumWords"
+        tools:text="3" />
 
     <SeekBar
         android:id="@+id/seekNumWords"
@@ -96,7 +101,7 @@
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
         android:max="@integer/numMaxWords"
-        android:min="1"
+        android:min="2"
         android:progress="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -116,9 +121,10 @@
 
     <CheckBox
         android:id="@+id/chkUpperCase"
-        android:layout_width="99dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:checked="true"
         android:text="@string/txt.uppercase"
         app:layout_constraintBaseline_toBaselineOf="@+id/chkNumbers"
         app:layout_constraintEnd_toEndOf="parent"
@@ -127,7 +133,7 @@
 
     <CheckBox
         android:id="@+id/chkNumbers"
-        android:layout_width="89dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -139,8 +145,8 @@
 
     <CheckBox
         android:id="@+id/chkSymbols"
-        android:layout_width="86dp"
-        android:layout_height="34dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="40dp"
         android:text="@string/txt.symbols"
