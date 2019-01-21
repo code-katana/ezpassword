@@ -74,7 +74,7 @@ class WordProcessor(private val context: Context) {
 
                     val result = mutableSetOf<String>()
                     words.forEach {
-                        if (it.length > 1) result.add(it)
+                        if (it.length > 1) result.add(it.toLowerCase())
                     }
                     val wordBank = WordBank(context)
                     wordBank.saveNewWords(result)

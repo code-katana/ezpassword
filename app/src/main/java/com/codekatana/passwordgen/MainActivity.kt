@@ -14,36 +14,45 @@ class MainActivity : AppCompatActivity(), DownloadListener {
 
     override fun updateUI(result: List<String>) {
         val textBox = findViewById<EditText>(R.id.txtGenerated)
-        val chkUppercase = findViewById<CheckBox>(R.id.chkUpperCase)
-        val chkNumbers = findViewById<CheckBox>(R.id.chkNumbers)
-        val chkSymbols = findViewById<CheckBox>(R.id.chkSymbols)
+
         val rand = Random()
-        val hasNumber = chkNumbers.isChecked
-        val hasSymbols = chkSymbols.isChecked
-        val hasUppercase = chkUppercase.isChecked
+        val hasNumber = findViewById<CheckBox>(R.id.chkNumbers).isChecked
+        val hasSymbols = findViewById<CheckBox>(R.id.chkSymbols).isChecked
+        val hasUppercase = findViewById<CheckBox>(R.id.chkUpperCase).isChecked
+
+        val words = mutableListOf<String>()
+        words.addAll(result)
 
         var generated = ""
-        for (word in result) {
-            generated = if (hasUppercase) {
-                generated + word.substring(0, 1).toUpperCase() + word.substring(1)
-            } else {
-                generated + word
-            }
+        val nextRand = rand.nextInt(words.size)
+        if (hasUppercase) {
+            var word = result[nextRand]
+            word = word.substring(0, 1).toUpperCase() + word.substring(1)
+            words[nextRand] = word
         }
+        words.forEach { generated += it }
 
         if (hasNumber) {
-            generated = generated.replaceFirst("[oO]".toRegex(), "0")
-            generated = generated.replaceFirst("[eE]".toRegex(), "3")
+            if (generated.contains("o")) {
+                generated = generated.replaceFirst("o", "0")
+            } else if (generated.contains("e")) {
+                generated = generated.replaceFirst("e", "3")
+            } else if (generated.contains("l")) {
+                generated = generated.replaceFirst("l", "1")
+            }
         }
 
         if (hasSymbols) {
             val powerBallNumber = rand.nextInt(MAX_RAND)
-            generated = if (powerBallNumber % 2 == 0)
-                generated.replaceFirst("[sS]".toRegex(), "\\$")
-            else
-                generated.replaceFirst("[iI]".toRegex(), "!")
-            if (powerBallNumber % 3 == 0)
-                generated = generated.replaceFirst("[aA]".toRegex(), "@")
+            for (i in 0..(powerBallNumber % 2)) {
+                if (generated.contains("s")) {
+                    generated = generated.replaceFirst("s", "$")
+                } else if (generated.contains("i")) {
+                    generated = generated.replaceFirst("i", "!")
+                } else if (generated.contains("a")) {
+                    generated = generated.replaceFirst("a", "@")
+                }
+            }
         }
 
         textBox.setText(generated)
@@ -87,7 +96,7 @@ class MainActivity : AppCompatActivity(), DownloadListener {
         clipboard.primaryClip = clip
 
         val context = applicationContext
-        val text = resources.getText(R.string.txt_copied)
+        val text = getString(R.string.txt_copied)
         val duration = Toast.LENGTH_LONG
 
         Toast.makeText(context, text, duration).show()
