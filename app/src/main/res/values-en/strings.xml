@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EZ Password</string>
-    <string name="btn.generate">Generate</string>
-    <string name="btn.copy">Copy</string>
-    <string name="txt.password">Generated Password:</string>
-    <string name="txt.numwords">Number of words</string>
-    <string name="txt.uppercase">Uppercase</string>
-    <string name="txt.numbers">Numbers</string>
-    <string name="txt.symbols">Symbols</string>
-    <string name="txt.generated">Generated Value</string>
-    <string name="txt.copied">Password Copied!</string>
-    <string name="txt.NumChars">Number of characters generated: %1$d</string>
+    <string name="btn_generate">Generate</string>
+    <string name="btn_copy">Copy</string>
+    <string name="txt_password">Generated Password:</string>
+    <string name="txt_numwords">Number of words</string>
+    <string name="txt_uppercase">Uppercase</string>
+    <string name="txt_numbers">Numbers</string>
+    <string name="txt_symbols">Symbols</string>
+    <string name="txt_generated">Generated Value</string>
+    <string name="txt_copied">Password Copied!</string>
+    <string name="txt_NumChars">Number of characters generated: %1$d</string>
+    <string name="blank_str" />
 </resources>

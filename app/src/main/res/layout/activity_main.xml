@@ -17,10 +17,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:editable="@bool/bool.editable"
         android:ems="10"
         android:fontFamily="@font/roboto_mono"
-        android:hint="@string/txt.generated"
+        android:hint="@string/txt_generated"
         android:inputType="none"
         android:selectAllOnFocus="true"
         android:singleLine="true"
@@ -37,16 +36,15 @@
         android:layout_alignEnd="@+id/txtGenerated"
         android:layout_below="@+id/txtGenerated"
         android:layout_marginTop="40dp"
-        android:capitalize="words"
         android:onClick="onClickGenerate"
-        android:text="@string/btn.generate"
+        android:text="@string/btn_generate"
         android:textAllCaps="@bool/allCaps"
         app:layout_constraintEnd_toStartOf="@+id/btnCopy"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekNumWords"
-        tools:text="@string/btn.generate" />
+        tools:text="@string/btn_generate" />
 
     <TextView
         android:id="@+id/lblGeneratePassword"
@@ -56,8 +54,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="50dp"
-        android:labelFor="@id/txtGenerated"
-        android:text="@string/txt.password"
+        android:text="@string/txt_password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,7 +64,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:onClick="onClickCopy"
-        android:text="@string/btn.copy"
+        android:text="@string/btn_copy"
         android:textAllCaps="@bool/allCaps"
         android:textIsSelectable="@bool/allCaps"
         app:layout_constraintBaseline_toBaselineOf="@+id/btnGenerate"
@@ -81,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
-        android:text="@string/txt.numwords"
+        android:text="@string/txt_numwords"
         app:layout_constraintStart_toStartOf="@+id/seekNumWords"
         app:layout_constraintTop_toBottomOf="@+id/chkSymbols" />
 
@@ -92,8 +89,7 @@
         android:layout_marginStart="16dp"
         android:text="3"
         app:layout_constraintBaseline_toBaselineOf="@+id/lblNumWords"
-        app:layout_constraintStart_toEndOf="@+id/lblNumWords"
-        tools:text="3" />
+        app:layout_constraintStart_toEndOf="@+id/lblNumWords" />
 
     <SeekBar
         android:id="@+id/seekNumWords"
@@ -101,10 +97,8 @@
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
         android:max="@integer/numMaxWords"
-        android:min="2"
-        android:progress="3"
+        android:progress="@integer/defaultNumWords"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblNumWords" />
 
@@ -113,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="   "
+        android:text="@string/blank_str"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -125,7 +119,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:checked="true"
-        android:text="@string/txt.uppercase"
+        android:text="@string/txt_uppercase"
         app:layout_constraintBaseline_toBaselineOf="@+id/chkNumbers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -137,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="@string/txt.numbers"
+        android:text="@string/txt_numbers"
         app:layout_constraintBaseline_toBaselineOf="@+id/chkSymbols"
         app:layout_constraintEnd_toStartOf="@+id/chkUpperCase"
         app:layout_constraintHorizontal_bias="0.5"
@@ -149,7 +143,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="40dp"
-        android:text="@string/txt.symbols"
+        android:text="@string/txt_symbols"
         app:layout_constraintEnd_toStartOf="@+id/chkNumbers"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"

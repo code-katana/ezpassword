@@ -1,32 +1,68 @@
 package com.codekatana.passwordgen
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.Toast
-import java.util.Random
-import java.util.concurrent.ExecutionException
+import android.widget.*
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
-    private var sb: SeekBar? = null
+class MainActivity : AppCompatActivity(), DownloadListener {
 
+    override fun updateUI(result: List<String>) {
+        val textBox = findViewById<EditText>(R.id.txtGenerated)
+        val chkUppercase = findViewById<CheckBox>(R.id.chkUpperCase)
+        val chkNumbers = findViewById<CheckBox>(R.id.chkNumbers)
+        val chkSymbols = findViewById<CheckBox>(R.id.chkSymbols)
+        val rand = Random()
+        val hasNumber = chkNumbers.isChecked
+        val hasSymbols = chkSymbols.isChecked
+        val hasUppercase = chkUppercase.isChecked
+
+        var generated = ""
+        for (word in result) {
+            generated = if (hasUppercase) {
+                generated + word.substring(0, 1).toUpperCase() + word.substring(1)
+            } else {
+                generated + word
+            }
+        }
+
+        if (hasNumber) {
+            generated = generated.replaceFirst("[oO]".toRegex(), "0")
+            generated = generated.replaceFirst("[eE]".toRegex(), "3")
+        }
+
+        if (hasSymbols) {
+            val powerBallNumber = rand.nextInt(MAX_RAND)
+            generated = if (powerBallNumber % 2 == 0)
+                generated.replaceFirst("[sS]".toRegex(), "\\$")
+            else
+                generated.replaceFirst("[iI]".toRegex(), "!")
+            if (powerBallNumber % 3 == 0)
+                generated = generated.replaceFirst("[aA]".toRegex(), "@")
+        }
+
+        textBox.setText(generated)
+        val numChars = findViewById<TextView>(R.id.lblNumChars)
+        numChars.text = getString(R.string.txt_NumChars, generated.length)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sb = findViewById(R.id.seekNumWords)
+        val sb = findViewById<SeekBar>(R.id.seekNumWords)
+
         val numWords = findViewById<TextView>(R.id.lblTxtNumWords)
-        sb!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
+        sb.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                numWords.text = "$i"
+                numWords.text = "${i + 2}"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -36,54 +72,11 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onClickGenerate(view: View) {
-        val rand = Random()
-        val task = WikiDownloader().execute(sb!!.progress)
-
-        val textBox = findViewById<EditText>(R.id.txtGenerated)
-        val chkUppercase = findViewById<CheckBox>(R.id.chkUpperCase)
-        val chkNumbers = findViewById<CheckBox>(R.id.chkNumbers)
-        val chkSymbols = findViewById<CheckBox>(R.id.chkSymbols)
-
-        val hasNumber = chkNumbers.isChecked
-        val hasSymbols = chkSymbols.isChecked
-        val hasUppercase = chkUppercase.isChecked
-
-        var generated = ""
-        try {
-            val result = task.get()
-            for (word in result) {
-                generated = if (hasUppercase) {
-                    generated + word.substring(0, 1).toUpperCase() + word.substring(1)
-                } else {
-                    generated + word
-                }
-            }
-
-            if (hasNumber) {
-                generated = generated.replaceFirst("[oO]".toRegex(), "0")
-                generated = generated.replaceFirst("[eE]".toRegex(), "3")
-            }
-
-            if (hasSymbols) {
-                val powerBallNumber = rand.nextInt(MAX_RAND)
-                generated = if (powerBallNumber % 2 == 0)
-                    generated.replaceFirst("[sS]".toRegex(), "\\$")
-                else
-                    generated.replaceFirst("[iI]".toRegex(), "!")
-                if (powerBallNumber % 3 == 0)
-                    generated = generated.replaceFirst("[aA]".toRegex(), "@")
-            }
-
-            textBox.setText(generated)
-            val numChars = findViewById<TextView>(R.id.lblNumChars)
-            numChars.text = getString(R.string.txt_NumChars, generated.length)
-
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
+        WordProcessor(this.applicationContext).apply {
+            listener = this@MainActivity
+            requestedWords = findViewById<SeekBar>(R.id.seekNumWords).progress + 2
+            getWords()
         }
-
     }
 
     fun onClickCopy(view: View) {
@@ -104,4 +97,9 @@ class MainActivity : AppCompatActivity() {
         const val MAX_RAND = 15
     }
 
+}
+
+
+interface DownloadListener {
+    fun updateUI(result: List<String>)
 }
