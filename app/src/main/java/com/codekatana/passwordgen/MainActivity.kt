@@ -33,24 +33,20 @@ class MainActivity : AppCompatActivity(), DownloadListener {
         words.forEach { generated += it }
 
         if (hasNumber) {
-            if (generated.contains("o")) {
-                generated = generated.replaceFirst("o", "0")
-            } else if (generated.contains("e")) {
-                generated = generated.replaceFirst("e", "3")
-            } else if (generated.contains("l")) {
-                generated = generated.replaceFirst("l", "1")
+            when {
+                generated.contains("o") -> generated = generated.replaceFirst("o", "0")
+                generated.contains("e") -> generated = generated.replaceFirst("e", "3")
+                generated.contains("l") -> generated = generated.replaceFirst("l", "1")
             }
         }
 
         if (hasSymbols) {
             val powerBallNumber = rand.nextInt(MAX_RAND)
             for (i in 0..(powerBallNumber % 2)) {
-                if (generated.contains("s")) {
-                    generated = generated.replaceFirst("s", "$")
-                } else if (generated.contains("i")) {
-                    generated = generated.replaceFirst("i", "!")
-                } else if (generated.contains("a")) {
-                    generated = generated.replaceFirst("a", "@")
+                when {
+                    generated.contains("s") -> generated = generated.replaceFirst("s", "$")
+                    generated.contains("i") -> generated = generated.replaceFirst("i", "!")
+                    generated.contains("a") -> generated = generated.replaceFirst("a", "@")
                 }
             }
         }
