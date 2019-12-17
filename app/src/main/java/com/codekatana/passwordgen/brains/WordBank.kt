@@ -10,7 +10,7 @@ private const val cacheFileName = "words.bin"
 
 class WordBank {
 
-    private val cachedFile = File(EzPassApplication.instance.filesDir, cacheFileName).also {
+    private val cachedFile = File(EzPassApplication.context.filesDir, cacheFileName).also {
         if (!it.exists()) it.createNewFile()
     }
     var wordEntries = HashMap<String, WordEntry>()

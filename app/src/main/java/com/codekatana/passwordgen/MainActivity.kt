@@ -8,29 +8,23 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
-class MainActivity(override val coroutineContext: CoroutineContext) : AppCompatActivity(), DownloadListener, CoroutineScope {
+class MainActivity : AppCompatActivity(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
-    override fun updateUI(result: List<String>) {
-        val textBox = findViewById<EditText>(R.id.txtGenerated)
-
+    private fun updateUI(wc: Int): String {
         val rand = Random()
         val hasNumber = findViewById<CheckBox>(R.id.chkNumbers).isChecked
         val hasSymbols = findViewById<CheckBox>(R.id.chkSymbols).isChecked
         val hasUppercase = findViewById<CheckBox>(R.id.chkUpperCase).isChecked
-
-        val words = mutableListOf<String>()
-        words.addAll(result)
-
+        val words = EzPassApplication.wordBank.getWords(wc).toMutableList()
+        launch { EzPassApplication.wordProcessor.getWords() }
         var generated = ""
         val nextRand = rand.nextInt(words.size)
         if (hasUppercase) {
-            var word = result[nextRand]
-            word = word.substring(0, 1).toUpperCase() + word.substring(1)
+            var word = words[nextRand]
+            word = word.substring(0, 1).toUpperCase(Locale.ENGLISH) + word.substring(1)
             words[nextRand] = word
         }
         words.forEach { generated += it }
@@ -53,10 +47,7 @@ class MainActivity(override val coroutineContext: CoroutineContext) : AppCompatA
                 }
             }
         }
-
-        textBox.setText(generated)
-        val numChars = findViewById<TextView>(R.id.lblNumChars)
-        numChars.text = getString(R.string.txt_NumChars, generated.length)
+        return generated
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,13 +67,23 @@ class MainActivity(override val coroutineContext: CoroutineContext) : AppCompatA
         })
 
         launch {
-            WordProcessor(EzPassApplication.instance).apply { getWords() }
+            EzPassApplication.wordProcessor.getWords()
         }
 
     }
 
     fun onClickGenerate(view: View) {
-
+        val numWordsNeeded = findViewById<SeekBar>(R.id.seekNumWords).progress + 2
+        launch {
+            val generated = async { updateUI(numWordsNeeded) }
+            val textBox = findViewById<EditText>(R.id.txtGenerated)
+            val numChars = findViewById<TextView>(R.id.lblNumChars)
+            val generatedVal = generated.await()
+            runOnUiThread {
+                textBox.setText(generatedVal)
+                numChars.text = getString(R.string.txt_NumChars, generatedVal.length)
+            }
+        }
     }
 
     fun onClickCopy(view: View) {
@@ -99,13 +100,13 @@ class MainActivity(override val coroutineContext: CoroutineContext) : AppCompatA
         Toast.makeText(context, text, duration).show()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
+    }
+
     companion object {
         const val MAX_RAND = 15
     }
 
-}
-
-
-interface DownloadListener {
-    fun updateUI(result: List<String>)
 }

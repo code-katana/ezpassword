@@ -88,6 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginStart="16dp"
+        android:backgroundTint="#00AAAAAA"
         android:text="3"
         app:layout_constraintBaseline_toBaselineOf="@+id/lblNumWords"
         app:layout_constraintStart_toEndOf="@+id/lblNumWords" />
