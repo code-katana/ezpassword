@@ -8,9 +8,12 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity(), DownloadListener {
+class MainActivity(override val coroutineContext: CoroutineContext) : AppCompatActivity(), DownloadListener, CoroutineScope {
 
     override fun updateUI(result: List<String>) {
         val textBox = findViewById<EditText>(R.id.txtGenerated)
@@ -62,26 +65,24 @@ class MainActivity : AppCompatActivity(), DownloadListener {
 
         val sb = findViewById<SeekBar>(R.id.seekNumWords)
 
-        val numWords = findViewById<TextView>(R.id.lblTxtNumWords)
-
         sb.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                numWords.text = "${i + 2}"
+                findViewById<TextView>(R.id.lblTxtNumWords).text = "${i + 2}"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
+
+        launch {
+            WordProcessor(EzPassApplication.instance).apply { getWords() }
+        }
+
     }
 
-
     fun onClickGenerate(view: View) {
-        WordProcessor(this.applicationContext).apply {
-            listener = this@MainActivity
-            requestedWords = findViewById<SeekBar>(R.id.seekNumWords).progress + 2
-            getWords()
-        }
+
     }
 
     fun onClickCopy(view: View) {

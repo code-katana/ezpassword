@@ -17,7 +17,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:editable="false"
         android:ems="10"
         android:fontFamily="@font/roboto_mono"
         android:hint="@string/txt_generated"
@@ -28,7 +27,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblGeneratePassword" />
+        app:layout_constraintTop_toBottomOf="@+id/lblGeneratePassword"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/btnGenerate"

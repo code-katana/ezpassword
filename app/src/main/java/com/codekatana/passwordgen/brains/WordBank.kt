@@ -1,16 +1,16 @@
 package com.codekatana.passwordgen.brains
 
-import android.content.Context
 import android.util.Log
+import com.codekatana.passwordgen.EzPassApplication
 import java.io.*
 import java.util.*
 import kotlin.collections.HashMap
 
 private const val cacheFileName = "words.bin"
 
-class WordBank(context: Context) {
+class WordBank {
 
-    private val cachedFile = File(context.filesDir, cacheFileName).also {
+    private val cachedFile = File(EzPassApplication.instance.filesDir, cacheFileName).also {
         if (!it.exists()) it.createNewFile()
     }
     var wordEntries = HashMap<String, WordEntry>()
