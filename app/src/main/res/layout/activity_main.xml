@@ -20,15 +20,15 @@
         android:ems="10"
         android:fontFamily="@font/roboto_mono"
         android:hint="@string/txt_generated"
-        android:inputType="none"
+        android:importantForAutofill="no"
+        android:inputType="textFilter"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:textIsSelectable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblGeneratePassword"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/lblGeneratePassword" />
 
     <Button
         android:id="@+id/btnGenerate"

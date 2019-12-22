@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by CoroutineScope(Dispa
             word = word.substring(0, 1).toUpperCase(Locale.ENGLISH) + word.substring(1)
             words[nextRand] = word
         }
-        words.forEach { generated += it }
+        generated = words.joinToString(" ")
 
         if (hasNumber) {
             when {
@@ -79,16 +79,17 @@ class MainActivity : AppCompatActivity(), CoroutineScope by CoroutineScope(Dispa
             val textBox = findViewById<EditText>(R.id.txtGenerated)
             val numChars = findViewById<TextView>(R.id.lblNumChars)
             val generatedVal = generated.await()
+            val length = generatedVal.filterNot { ' ' == it }.length
             runOnUiThread {
                 textBox.setText(generatedVal)
-                numChars.text = getString(R.string.txt_NumChars, generatedVal.length)
+                numChars.text = getString(R.string.txt_NumChars, length)
             }
         }
     }
 
     fun onClickCopy(view: View) {
         val textBox = findViewById<EditText>(R.id.txtGenerated)
-        val generated = textBox.text.toString()
+        val generated = textBox.text.toString().filterNot { it == ' ' }
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Generated Password", generated)
         clipboard.primaryClip = clip
