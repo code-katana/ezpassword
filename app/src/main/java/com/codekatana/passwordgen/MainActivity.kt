@@ -34,14 +34,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by CoroutineScope(Dispa
         }
 
         if (hasSymbols) {
-            val powerBallNumber = rand.nextInt(MAX_RAND)
-            for (i in 0..(powerBallNumber % 2)) {
-                when {
-                    generated.contains("s") -> generated = generated.replaceFirst("s", "$")
-                    generated.contains("i") -> generated = generated.replaceFirst("i", "!")
-                    generated.contains("a") -> generated = generated.replaceFirst("a", "@")
-                }
-            }
+            generated = WordProcessor.specialize(generated)
         }
         return generated
     }
