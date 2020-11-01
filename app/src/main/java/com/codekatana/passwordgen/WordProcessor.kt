@@ -1,7 +1,6 @@
 package com.codekatana.passwordgen
 
 import android.content.Context
-import android.support.annotation.VisibleForTesting
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
@@ -75,7 +74,6 @@ class WordProcessor {
                 "rnfilterredir=nonredirects&rnlimit=3"
         private const val specificQuery = "$WIKI_URL?action=query&format=json&prop=extracts&explaintext=1&pageids=%s"
 
-        @VisibleForTesting
         fun sprinkleNumbers(input: String): String {
             var gen = input
             when {
@@ -90,6 +88,23 @@ class WordProcessor {
                 gen += (Random().nextInt() % 10)
             }
             return gen
+        }
+
+        fun specialize(input: String): String {
+            var generated = input
+            val specials = "!@#$%*?/+-".toCharArray()
+            val powerBallNumber = Random().nextInt(MainActivity.MAX_RAND)
+            for (i in 0..(powerBallNumber % 2)) {
+                when {
+                    generated.contains("s") -> generated = generated.replaceFirst("s", "$")
+                    generated.contains("i") -> generated = generated.replaceFirst("i", "!")
+                    generated.contains("a") -> generated = generated.replaceFirst("a", "@")
+                }
+            }
+            if (generated == input) {
+                generated += specials[Random().nextInt(specials.size)]
+            }
+            return generated
         }
 
     }
