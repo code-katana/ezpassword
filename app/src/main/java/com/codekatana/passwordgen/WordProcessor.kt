@@ -1,9 +1,9 @@
 package com.codekatana.passwordgen
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.util.Log
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.codekatana.passwordgen.EzPassApplication.Companion.context
 import java.time.Duration
@@ -32,7 +32,7 @@ class WordProcessor {
         Log.d(javaClass.simpleName, "Pulling new data from Wikipedia.")
         val rand = Random()
         val randomJsonRequest = JsonObjectRequest(Request.Method.GET, randomQuery, null,
-                Response.Listener { response ->
+                { response ->
                     val randResponse = response.optJSONObject("query")
                             ?.optJSONArray("random")
                     val articleId = randResponse?.optJSONObject(rand.nextInt(randResponse.length()))
@@ -42,7 +42,7 @@ class WordProcessor {
                         processArticle(articleId)
                     }
                 },
-                Response.ErrorListener { error ->
+                { error ->
                     Log.e(javaClass.simpleName, error.toString())
                 }
         )
@@ -53,7 +53,7 @@ class WordProcessor {
     private fun processArticle(articleId: Long) {
         val articleRequest = JsonObjectRequest(Request.Method.GET, specificQuery.format(articleId),
                 null,
-                Response.Listener { response ->
+                { response ->
                     val result = mutableSetOf<String>()
                     val article = response.optJSONObject("query")
                             ?.optJSONObject("pages")
@@ -63,7 +63,7 @@ class WordProcessor {
                     cleanText.split("\\s+".toRegex()).filter { it.length > 1 }.toCollection(result)
                     EzPassApplication.wordBank.saveNewWords(result)
                 },
-                Response.ErrorListener {
+                {
                     Log.e(javaClass.simpleName, it.toString())
                 })
         MySingleton.getInstance(context.applicationContext).addToRequestQueue(articleRequest)
@@ -74,5 +74,23 @@ class WordProcessor {
         private const val randomQuery = "$WIKI_URL?action=query&format=json&list=random&rnnamespace=0&" +
                 "rnfilterredir=nonredirects&rnlimit=3"
         private const val specificQuery = "$WIKI_URL?action=query&format=json&prop=extracts&explaintext=1&pageids=%s"
+
+        @VisibleForTesting
+        fun sprinkleNumbers(input: String): String {
+            var gen = input
+            when {
+                gen.contains("o") -> gen = gen.replaceFirst("o", "0")
+                gen.contains("e") -> gen = gen.replaceFirst("e", "3")
+                gen.contains("l") -> gen = gen.replaceFirst("l", "1")
+            }
+            val numContent = gen.replace(Regex("[^0-9]"), "")
+            Log.d("EzPass", "numContent=$numContent")
+            if (numContent.isBlank()) {
+                Log.i("EzPass", "No number to replace. Adding rand at end")
+                gen += (Random().nextInt() % 10)
+            }
+            return gen
+        }
+
     }
 }

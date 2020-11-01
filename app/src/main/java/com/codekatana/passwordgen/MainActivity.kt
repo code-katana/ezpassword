@@ -30,11 +30,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by CoroutineScope(Dispa
         generated = words.joinToString(" ")
 
         if (hasNumber) {
-            when {
-                generated.contains("o") -> generated = generated.replaceFirst("o", "0")
-                generated.contains("e") -> generated = generated.replaceFirst("e", "3")
-                generated.contains("l") -> generated = generated.replaceFirst("l", "1")
-            }
+            generated = WordProcessor.sprinkleNumbers(generated)
         }
 
         if (hasSymbols) {
